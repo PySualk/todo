@@ -1,0 +1,34 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="appUser">
+            <h2><span jhiTranslate="todoApp.appUser.detail.title">App User</span> {{ appUser.id }}</h2>
+
+            <hr>
+
+            <jhi-alert-error></jhi-alert-error>
+
+            <dl class="row-md jh-entity-details">
+                <dt><span jhiTranslate="todoApp.appUser.bla">Bla</span></dt>
+                <dd>
+                    <span>{{ appUser.bla }}</span>
+                </dd>
+                <dt><span jhiTranslate="todoApp.appUser.internalUser">Internal User</span></dt>
+                <dd>
+                    {{ appUser.internalUser?.id }}
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/app-user', appUser.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

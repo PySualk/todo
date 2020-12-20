@@ -39,5 +39,5 @@
     "otherModules": [],
     "blueprints": []
   },
-  "entities": ["Todo", "Category"]
+  "entities": ["Todo", "Category", "AppUser"]
 }
