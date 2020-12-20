@@ -48,9 +48,6 @@ public class CacheConfiguration {
             createCache(cm, org.sualk.domain.User.class.getName());
             createCache(cm, org.sualk.domain.Authority.class.getName());
             createCache(cm, org.sualk.domain.User.class.getName() + ".authorities");
-            createCache(cm, org.sualk.domain.Todo.class.getName());
-            createCache(cm, org.sualk.domain.Category.class.getName());
-            createCache(cm, org.sualk.domain.Category.class.getName() + ".todos");
             // jhipster-needle-ehcache-add-entry
         };
     }
