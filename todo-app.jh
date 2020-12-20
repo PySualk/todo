@@ -1,0 +1,30 @@
+
+application {
+  config {
+    baseName todoApp,
+    applicationType monolith,
+    packageName org.sualk,
+    authenticationType jwt,
+    prodDatabaseType mysql,
+    clientFramework angular
+  }
+  entities *
+}
+
+@service(serviceClass)
+@dto(mapstruct)
+entity Todo {
+	text String
+    completed Boolean
+}
+
+@service(serviceClass)
+@dto(mapstruct)
+entity Category {
+	name String required
+}
+
+relationship OneToMany {
+  Category to Todo
+}
+    
