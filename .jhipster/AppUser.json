@@ -1,0 +1,30 @@
+{
+  "name": "AppUser",
+  "fields": [
+    {
+      "fieldName": "bla",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "one-to-one",
+      "otherEntityName": "user",
+      "otherEntityRelationshipName": "appUser",
+      "relationshipName": "internalUser",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20201220131157",
+  "entityTableName": "app_user",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["todoApp"]
+}
