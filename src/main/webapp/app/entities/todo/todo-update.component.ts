@@ -22,7 +22,7 @@ export class TodoUpdateComponent implements OnInit {
     id: [],
     text: [],
     completed: [],
-    category: [],
+    categoryId: [],
   });
 
   constructor(
@@ -45,7 +45,7 @@ export class TodoUpdateComponent implements OnInit {
       id: todo.id,
       text: todo.text,
       completed: todo.completed,
-      category: todo.category,
+      categoryId: todo.categoryId,
     });
   }
 
@@ -69,7 +69,7 @@ export class TodoUpdateComponent implements OnInit {
       id: this.editForm.get(['id'])!.value,
       text: this.editForm.get(['text'])!.value,
       completed: this.editForm.get(['completed'])!.value,
-      category: this.editForm.get(['category'])!.value,
+      categoryId: this.editForm.get(['categoryId'])!.value,
     };
   }
 

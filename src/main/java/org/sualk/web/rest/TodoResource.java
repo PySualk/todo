@@ -1,8 +1,8 @@
 package org.sualk.web.rest;
 
-import org.sualk.domain.Todo;
-import org.sualk.repository.TodoRepository;
+import org.sualk.service.TodoService;
 import org.sualk.web.rest.errors.BadRequestAlertException;
+import org.sualk.service.dto.TodoDTO;
 
 import io.github.jhipster.web.util.HeaderUtil;
 import io.github.jhipster.web.util.ResponseUtil;
@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -23,7 +22,6 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("/api")
-@Transactional
 public class TodoResource {
 
     private final Logger log = LoggerFactory.getLogger(TodoResource.class);
@@ -33,26 +31,26 @@ public class TodoResource {
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
 
-    private final TodoRepository todoRepository;
+    private final TodoService todoService;
 
-    public TodoResource(TodoRepository todoRepository) {
-        this.todoRepository = todoRepository;
+    public TodoResource(TodoService todoService) {
+        this.todoService = todoService;
     }
 
     /**
      * {@code POST  /todos} : Create a new todo.
      *
-     * @param todo the todo to create.
-     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new todo, or with status {@code 400 (Bad Request)} if the todo has already an ID.
+     * @param todoDTO the todoDTO to create.
+     * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new todoDTO, or with status {@code 400 (Bad Request)} if the todo has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PostMapping("/todos")
-    public ResponseEntity<Todo> createTodo(@RequestBody Todo todo) throws URISyntaxException {
-        log.debug("REST request to save Todo : {}", todo);
-        if (todo.getId() != null) {
+    public ResponseEntity<TodoDTO> createTodo(@RequestBody TodoDTO todoDTO) throws URISyntaxException {
+        log.debug("REST request to save Todo : {}", todoDTO);
+        if (todoDTO.getId() != null) {
             throw new BadRequestAlertException("A new todo cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        Todo result = todoRepository.save(todo);
+        TodoDTO result = todoService.save(todoDTO);
         return ResponseEntity.created(new URI("/api/todos/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
             .body(result);
@@ -61,21 +59,21 @@ public class TodoResource {
     /**
      * {@code PUT  /todos} : Updates an existing todo.
      *
-     * @param todo the todo to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated todo,
-     * or with status {@code 400 (Bad Request)} if the todo is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the todo couldn't be updated.
+     * @param todoDTO the todoDTO to update.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated todoDTO,
+     * or with status {@code 400 (Bad Request)} if the todoDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the todoDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/todos")
-    public ResponseEntity<Todo> updateTodo(@RequestBody Todo todo) throws URISyntaxException {
-        log.debug("REST request to update Todo : {}", todo);
-        if (todo.getId() == null) {
+    public ResponseEntity<TodoDTO> updateTodo(@RequestBody TodoDTO todoDTO) throws URISyntaxException {
+        log.debug("REST request to update Todo : {}", todoDTO);
+        if (todoDTO.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        Todo result = todoRepository.save(todo);
+        TodoDTO result = todoService.save(todoDTO);
         return ResponseEntity.ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, todo.getId().toString()))
+            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, todoDTO.getId().toString()))
             .body(result);
     }
 
@@ -85,34 +83,34 @@ public class TodoResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of todos in body.
      */
     @GetMapping("/todos")
-    public List<Todo> getAllTodos() {
+    public List<TodoDTO> getAllTodos() {
         log.debug("REST request to get all Todos");
-        return todoRepository.findAll();
+        return todoService.findAll();
     }
 
     /**
      * {@code GET  /todos/:id} : get the "id" todo.
      *
-     * @param id the id of the todo to retrieve.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the todo, or with status {@code 404 (Not Found)}.
+     * @param id the id of the todoDTO to retrieve.
+     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the todoDTO, or with status {@code 404 (Not Found)}.
      */
     @GetMapping("/todos/{id}")
-    public ResponseEntity<Todo> getTodo(@PathVariable Long id) {
+    public ResponseEntity<TodoDTO> getTodo(@PathVariable Long id) {
         log.debug("REST request to get Todo : {}", id);
-        Optional<Todo> todo = todoRepository.findById(id);
-        return ResponseUtil.wrapOrNotFound(todo);
+        Optional<TodoDTO> todoDTO = todoService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(todoDTO);
     }
 
     /**
      * {@code DELETE  /todos/:id} : delete the "id" todo.
      *
-     * @param id the id of the todo to delete.
+     * @param id the id of the todoDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
     @DeleteMapping("/todos/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
         log.debug("REST request to delete Todo : {}", id);
-        todoRepository.deleteById(id);
+        todoService.delete(id);
         return ResponseEntity.noContent().headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString())).build();
     }
 }

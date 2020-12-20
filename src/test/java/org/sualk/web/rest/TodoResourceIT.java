@@ -3,6 +3,9 @@ package org.sualk.web.rest;
 import org.sualk.TodoApp;
 import org.sualk.domain.Todo;
 import org.sualk.repository.TodoRepository;
+import org.sualk.service.TodoService;
+import org.sualk.service.dto.TodoDTO;
+import org.sualk.service.mapper.TodoMapper;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -37,6 +40,12 @@ public class TodoResourceIT {
 
     @Autowired
     private TodoRepository todoRepository;
+
+    @Autowired
+    private TodoMapper todoMapper;
+
+    @Autowired
+    private TodoService todoService;
 
     @Autowired
     private EntityManager em;
@@ -81,9 +90,10 @@ public class TodoResourceIT {
     public void createTodo() throws Exception {
         int databaseSizeBeforeCreate = todoRepository.findAll().size();
         // Create the Todo
+        TodoDTO todoDTO = todoMapper.toDto(todo);
         restTodoMockMvc.perform(post("/api/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(todo)))
+            .content(TestUtil.convertObjectToJsonBytes(todoDTO)))
             .andExpect(status().isCreated());
 
         // Validate the Todo in the database
@@ -101,11 +111,12 @@ public class TodoResourceIT {
 
         // Create the Todo with an existing ID
         todo.setId(1L);
+        TodoDTO todoDTO = todoMapper.toDto(todo);
 
         // An entity with an existing ID cannot be created, so this API call must fail
         restTodoMockMvc.perform(post("/api/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(todo)))
+            .content(TestUtil.convertObjectToJsonBytes(todoDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Todo in the database
@@ -166,10 +177,11 @@ public class TodoResourceIT {
         updatedTodo
             .text(UPDATED_TEXT)
             .completed(UPDATED_COMPLETED);
+        TodoDTO todoDTO = todoMapper.toDto(updatedTodo);
 
         restTodoMockMvc.perform(put("/api/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(updatedTodo)))
+            .content(TestUtil.convertObjectToJsonBytes(todoDTO)))
             .andExpect(status().isOk());
 
         // Validate the Todo in the database
@@ -185,10 +197,13 @@ public class TodoResourceIT {
     public void updateNonExistingTodo() throws Exception {
         int databaseSizeBeforeUpdate = todoRepository.findAll().size();
 
+        // Create the Todo
+        TodoDTO todoDTO = todoMapper.toDto(todo);
+
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
         restTodoMockMvc.perform(put("/api/todos")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(TestUtil.convertObjectToJsonBytes(todo)))
+            .content(TestUtil.convertObjectToJsonBytes(todoDTO)))
             .andExpect(status().isBadRequest());
 
         // Validate the Todo in the database

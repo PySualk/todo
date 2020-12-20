@@ -18,8 +18,8 @@
                 </dd>
                 <dt><span jhiTranslate="todoApp.todo.category">Category</span></dt>
                 <dd>
-                    <div *ngIf="todo.category">
-                        <a [routerLink]="['/category', todo.category?.id, 'view']">{{ todo.category?.id }}</a>
+                    <div *ngIf="todo.categoryId">
+                        <a [routerLink]="['/category', todo.categoryId, 'view']">{{ todo.categoryId }}</a>
                     </div>
                 </dd>
             </dl>

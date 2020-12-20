@@ -35,8 +35,8 @@
                     <td>{{ todo.text }}</td>
                     <td>{{ todo.completed }}</td>
                     <td>
-                        <div *ngIf="todo.category">
-                            <a [routerLink]="['/category', todo.category?.id, 'view']" >{{ todo.category?.id }}</a>
+                        <div *ngIf="todo.categoryId">
+                            <a [routerLink]="['/category', todo.categoryId , 'view']" >{{ todo.categoryId }}</a>
                         </div>
                     </td>
                     <td class="text-right">
