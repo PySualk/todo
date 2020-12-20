@@ -24,7 +24,15 @@ entity Category {
 	name String required
 }
 
+entity AppUser {
+	bla String
+}
+
 relationship OneToMany {
   Category to Todo
 }
-    
+ 
+ 
+relationship OneToOne {
+	AppUser{internalUser} to User
+} 
